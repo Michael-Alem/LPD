@@ -1,3 +1,6 @@
+import streamlit as st
+import os
+import pytesseract
 from ultralytics import YOLO
 import torch
 
@@ -24,8 +27,6 @@ def inference(
 
     return results.pred[0]
 
-import pytesseract
-
 def ocr_tesseract(path2img):
  text = pytesseract.image_to_string(
  path2img,
@@ -33,9 +34,6 @@ def ocr_tesseract(path2img):
  config="--oem 3 --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
  )
  return text
-
-import streamlit as st
-import os
 
 def app():
     st.header("License Plate Recognition Web App")
