@@ -1,4 +1,5 @@
 streamlit
-YOLO
+ultralytics
+opencv-python
 pytesseract
 easyocr
