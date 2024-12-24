@@ -3,7 +3,7 @@ pandas
 matplotlib
 streamlit
 opencv-python-headless
-ultralytics==8.3.49
+ultralytics
 Pillow
 pytesseract
 dill
