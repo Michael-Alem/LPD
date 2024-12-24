@@ -16,7 +16,7 @@ st.set_page_config(
    page_icon = ":car:",
    initial_sidebar_state = "expanded",
 )
-st.title('YOLO Car Lisence Plate :red[Image and Video Processing]')
+st.title('YOLO Car Lisence Plate :green[Image and Video Processing]')
 
 pytesseract.pytesseract.tesseract_cmd = None
 
@@ -30,11 +30,8 @@ pytesseract.pytesseract.tesseract_cmd = find_tesseract_binary()
 if not pytesseract.pytesseract.tesseract_cmd:
     st.error("Tesseract binary not found in PATH. Please install Tesseract.")
 
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe" (only for local)
-
 # Allow users to upload images or videos
 uploaded_file = st.file_uploader("Upload an Image or Video", type=["jpg", "jpeg", "png", "bmp", "mp4", "avi", "mov", "mkv"])
-
 
 def remove_non_alphanum(text):
     return re.sub(r'[^a-zA-Z0-9]', ' ', text)
@@ -57,7 +54,7 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
     str: The path to the saved output image file.
     """
     try:
-        results = model.predict(path_test_car, device='cpu')
+        results = model.predict(path_test_car)
         image = cv2.imread(path_test_car)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
