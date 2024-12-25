@@ -38,7 +38,7 @@ def remove_non_alphanum(text):
 
 # Load YOLO model
 try:
-    model = YOLO('license_plate_detection.pt', map_location=torch.device('cpu')) 
+    model = YOLO('license_plate_detection.pt') 
 except Exception as e:
     st.error(f"Error loading YOLO model: {e}")
 
