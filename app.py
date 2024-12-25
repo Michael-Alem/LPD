@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import tempfile
+import torch
 
 st.set_page_config(
    page_title="YOLOv8 Car License Plate Image Processing",
@@ -37,7 +38,7 @@ def remove_non_alphanum(text):
 
 # Load YOLO model
 try:
-    model = YOLO('license_plate_detection.pt') 
+    model = YOLO('license_plate_detection.pt', map_location=torch.device('gpu')) 
 except Exception as e:
     st.error(f"Error loading YOLO model: {e}")
 
