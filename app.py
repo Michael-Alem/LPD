@@ -10,13 +10,12 @@ import re
 import shutil
 import tempfile
 
-
 st.set_page_config(
-   page_title = "YOLOv8 Car Lisence Plate Image and Video Processing",
-   page_icon = ":car:",
-   initial_sidebar_state = "expanded",
+   page_title="YOLOv8 Car License Plate Image Processing",
+   page_icon=":car:",
+   initial_sidebar_state="expanded",
 )
-st.title('YOLO Car Lisence Plate :green[Image and Video Processing]')
+st.title('YOLO Car License Plate :green[Image Processing]')
 
 pytesseract.pytesseract.tesseract_cmd = None
 
@@ -30,7 +29,7 @@ pytesseract.pytesseract.tesseract_cmd = find_tesseract_binary()
 if not pytesseract.pytesseract.tesseract_cmd:
     st.error("Tesseract binary not found in PATH. Please install Tesseract.")
 
-# Allow users to upload images or videos
+# Allow users to upload images
 uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
 
 def remove_non_alphanum(text):
@@ -68,29 +67,33 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
                 roi = gray_image[y1:y2, x1:x2]
 
                 # Perform OCR on the cropped image
-                text = pytesseract.image_to_string(roi,lang='eng', config = r'--oem 3 --psm 6')
+                text = pytesseract.image_to_string(roi, lang='eng', config=r'--oem 3 --psm 6')
                 text = remove_non_alphanum(text)
                 cv2.putText(image, f'{text}', (x1 , y1 + 2 * (y2 - y1)), 
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (51, 255, 255), 2, cv2.LINE_AA)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         # Ensure the directory exists before saving
-        os.makedirs(os.path.dirname(output_image_path), exist_ok= True)
+        os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
         # Save the image
         cv2.imwrite(output_image_path, image)
         return output_image_path
     except Exception as e:
         st.error(f"Error processing image: {e}")
         return None
-       
+
 def process_image(input_path:str, output_path:str) -> str:
-   """ Processes the uploaded image file and returns the path to the saved output file.
-   Parameters:
-   input_path (str): Path to the input image file.
-   output_path (str): Path to save the output image file.
-   Returns: str: The path to the saved output image file. """
-   
-   return predict_and_save_image(input_path, output_path)
-       
+    """
+    Processes the uploaded image file and returns the path to the saved output file.
+
+    Parameters:
+    input_path (str): Path to the input image file.
+    output_path (str): Path to save the output image file.
+
+    Returns:
+    str: The path to the saved output image file.
+    """
+    return predict_and_save_image(input_path, output_path)
+
 temp_directory = 'temp'
 if not os.path.exists(temp_directory):
     os.makedirs(temp_directory)
@@ -104,7 +107,7 @@ if st.button("Proceed"):
                 f.write(uploaded_file.getbuffer())
             
             with st.spinner('Processing...'):
-                result_path = process_media(input_path, output_path)
+                result_path = process_image(input_path, output_path)
                 if result_path:
                     st.image(result_path)
         except Exception as e:
