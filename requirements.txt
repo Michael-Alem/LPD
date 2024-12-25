@@ -3,8 +3,8 @@ pandas
 matplotlib
 streamlit
 opencv-python-headless
-torch
-ultralytics
+torch==2.5.1
+ultralytics==8.3.54
 Pillow
 pytesseract
 dill
