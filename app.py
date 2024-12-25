@@ -81,7 +81,29 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
     except Exception as e:
         st.error(f"Error processing image: {e}")
         return None
+       
+def process_media(input_path:str, output_path:str) -> str:
+    """
+    Processes the uploaded media file (image or video) and returns the path to the saved output file.
 
+    Parameters:
+    input_path (str): Path to the input media file.
+    output_path (str): Path to save the output media file.
+
+    Returns:
+    str: The path to the saved output media file.
+    """
+    file_extension = os.path.splitext(input_path)[1].lower()
+    if file_extension in ['.mp4', '.avi', '.mov', '.mkv']:
+        return predict_and_plot_video(input_path, output_path)
+       
+    elif file_extension in ['.jpg', '.jpeg', '.png', '.bmp']:
+        return predict_and_save_image(input_path, output_path)
+       
+    else:
+        st.error(f"Unsupported file type: {file_extension}")
+        return None
+       
 temp_directory = 'temp'
 if not os.path.exists(temp_directory):
     os.makedirs(temp_directory)
