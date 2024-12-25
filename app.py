@@ -8,7 +8,6 @@ from pytesseract import Output
 import os
 import re
 import shutil
-import tempfile
 import torch
 
 st.set_page_config(
