@@ -3,12 +3,8 @@ import pandas as pd
 import streamlit as st
 from ultralytics import YOLO
 import cv2
-import pytesseract
-from pytesseract import Output
 import os
-import re
 import shutil
-import torch
 
 st.set_page_config(
    page_title="YOLOv8 Car License Plate Image Processing",
@@ -17,23 +13,8 @@ st.set_page_config(
 )
 st.title('YOLO Car License Plate :green[Image Processing]')
 
-pytesseract.pytesseract.tesseract_cmd = None
-
-# search for tesseract binary in path
-@st.cache_resource
-def find_tesseract_binary() -> str:
-    return shutil.which("tesseract")
-
-# set tesseract binary path
-pytesseract.pytesseract.tesseract_cmd = find_tesseract_binary()
-if not pytesseract.pytesseract.tesseract_cmd:
-    st.error("Tesseract binary not found in PATH. Please install Tesseract.")
-
 # Allow users to upload images
 uploaded_file = st.file_uploader("Upload an Image", type=["jpg", "jpeg", "png"])
-
-def remove_non_alphanum(text):
-    return re.sub(r'[^a-zA-Z0-9]', ' ', text)
 
 # Load YOLO model
 try:
@@ -56,7 +37,6 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
         results = model.predict(path_test_car)
         image = cv2.imread(path_test_car)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         for result in results:
             for box in result.boxes:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
@@ -64,13 +44,6 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(image, f'{confidence*100:.1f}%', (x1, y1 - 10), 
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 178, 102), 2, cv2.LINE_AA)
-                roi = gray_image[y1:y2, x1:x2]
-
-                # Perform OCR on the cropped image
-                text = pytesseract.image_to_string(roi, lang='eng', config=r'--oem 3 --psm 6')
-                text = remove_non_alphanum(text)
-                cv2.putText(image, f'{text}', (x1 , y1 + 2 * (y2 - y1)), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (51, 255, 255), 2, cv2.LINE_AA)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         # Ensure the directory exists before saving
         os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
