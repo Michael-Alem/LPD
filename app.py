@@ -16,7 +16,7 @@ st.set_page_config(
    page_icon = ":car:",
    initial_sidebar_state = "expanded",
 )
-st.title('YOLO Car Lisence Plate :red[Image and Video Processing]')
+st.title('YOLO Car Lisence Plate :blue[Image and Video Processing]')
 
 pytesseract.pytesseract.tesseract_cmd = None
 
@@ -41,7 +41,7 @@ def remove_non_alphanum(text):
 
 # Load YOLO model
 try:
-    model = YOLO('best.pt') 
+    model = YOLO('license_plate_detection.pt') 
 except Exception as e:
     st.error(f"Error loading YOLO model: {e}")
 
