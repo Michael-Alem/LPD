@@ -41,12 +41,12 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
             for box in result.boxes:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 confidence = box.conf[0]
-                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
                 text = f'license-plate {confidence:.1f}%'
-                (w, h), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.25, 1)
-                cv2.rectangle(image, (x1, y1 - h - 5), (x1 + w, y1), (0, 255, 0), -1)
+                (w, h), _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)
+                cv2.rectangle(image, (x1, y1 - h - 5), (x1 + w, y1), (0, 0, 255), -1)
                 cv2.putText(image, text, (x1, y1 - 5), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.25, (0, 0, 0), 1, cv2.LINE_AA)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), 1, cv2.LINE_AA)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         # Ensure the directory exists before saving
         os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
