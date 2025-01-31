@@ -43,7 +43,7 @@ def predict_and_save_image(path_test_car:str, output_image_path:str)-> str:
                 confidence = box.conf[0]
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(image, f'{confidence*100:.1f}%', (x1, y1 - 10), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+                cv2.FONT_HERSHEY_SIMPLEX, 0.25, (0, 0, 0), 1, cv2.LINE_AA)
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         # Ensure the directory exists before saving
         os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
